@@ -70,42 +70,19 @@ class BinaryTree {
     /** maxSum(): return the maximum sum you can obtain by traveling along a path in the tree.
      * The path doesn't need to start at the root, but you can't visit a node more than once. */
     maxSum() {
-        let result = 0;
+        let maxSum = 0;
 
-        function maxSumRecursive(startNode) {
-            if (startNode === null) return 0;
+        const maxSumRecursive = (startNode) => {
+            if (!startNode) return 0;
 
-            const leftSum = maxSumRecursive(startNode.left);
-            const rightSum = maxSumRecursive(startNode.right);
-            result = Math.max(result, startNode.val + leftSum + rightSum);
-            return Math.max(0, leftSum + startNode.val, rightSum + startNode.val);
+            const leftMaxSum = maxSumRecursive(startNode.left);
+            const rightMaxSum = maxSumRecursive(startNode.right);
+
+            maxSum = Math.max(maxSum, leftMaxSum + rightMaxSum + startNode.val);
+            return Math.max(leftMaxSum + startNode.val, rightMaxSum + startNode.val);
         }
 
         maxSumRecursive(this.root);
-        return result;
-    }
-
-    /**
-     * I interpreted the maxSum problem in a different way than the solution shows. This is my
-     * version of the maxSum function.
-     */
-    maxSumVersion2() {
-        if (!this.root) return 0;
-
-        let maxSum = 0;
-        const maxSumRecursive = (startNode, prevSum) => {
-
-            if (!startNode.left && !startNode.right) {
-                maxSum = Math.max(maxSum, prevSum + startNode.val);
-                return;
-            }
-
-            if (startNode.left) maxSumRecursive(startNode.left, prevSum + startNode.val);
-            if (startNode.right) maxSumRecursive(startNode.right, prevSum + startNode.val);
-            return;
-        }
-
-        maxSumRecursive(this.root, 0);
         return maxSum;
     }
 
